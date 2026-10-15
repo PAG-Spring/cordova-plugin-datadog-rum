@@ -10,6 +10,7 @@
     www/datadogRum.js
 
         <clobbers target="window.plugins.datadogRum" />
+
     </js-module>
 
     <platform name="android">
@@ -21,29 +22,19 @@
             <feature name="DatadogRum">
                 <param
                     name="android-package"
-                    value="com.company.datadog.DatadogRum"/>
+                    value="com.company.datadog.DatadogRum" />
             </feature>
 
         </config-file>
 
         src/android/DatadogRum.java
+
     </platform>
 
     <platform name="ios">
 
-        <config-file
-            target="config.xml"
-            parent="/*">
-
-            <feature name="DatadogRum">
-                <param
-                    name="ios-package"
-                    value="DatadogRum"/>
-            </feature>
-
-        </config-file>
-
         src/ios/DatadogRum.swift
+
     </platform>
 
 </plugin>
