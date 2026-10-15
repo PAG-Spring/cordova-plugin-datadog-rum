@@ -1,0 +1,8 @@
+{
+  "name": "cordova-plugin-datadog-rum",
+  "version": "1.0.0",
+  "description": "Datadog RUM Cordova plugin",
+  "cordova": {
+    "id": "cordova-plugin-datadog-rum"
+  }
+}
