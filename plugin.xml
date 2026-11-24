@@ -1,36 +1,54 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
+<plugin id="cordova-plugin-datadog-rum" version="0.2.0"
+        xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android">
 
-<plugin
-    xmlns="http://apache.org/cordova/ns/plugins/1.0"
-    id="cordova-plugin-datadog-rum"
-    version="1.0.0">
+  <name>DatadogRum</name>
+  <description>Datadog RUM + Session Replay bridge for OutSystems / Cordova (Android first)</description>
 
-    <name>DatadogRum</name>
+  <!-- Build-time variables, supplied from the OutSystems Extensibility Configurations JSON.
+       "NOT_SET" means: do not start the native SDK. -->
+  <preference name="DD_APPLICATION_ID" default="NOT_SET"/>
+  <preference name="DD_CLIENT_TOKEN" default="NOT_SET"/>
+  <preference name="DD_ENV" default="dev"/>
+  <preference name="DD_SERVICE" default="outsystems-app"/>
+  <preference name="DD_SITE" default="EU1"/>
+  <preference name="DD_SESSION_SAMPLE_RATE" default="100"/>
+  <preference name="DD_REPLAY_SAMPLE_RATE" default="20"/>
+  <!-- Comma separated hostnames the WebView is allowed to forward events from -->
+  <preference name="DD_WEBVIEW_HOSTS" default="localhost"/>
 
-    <js-module src="www/datadogRum.js" name="DatadogRum">
-        <clobbers target="window.plugins.datadogRum" />
-    </js-module>
+  <js-module src="www/datadogRum.js" name="datadogRum">
+    <clobbers target="window.plugins.datadogRum"/>
+  </js-module>
 
-    <platform name="android">
+  <platform name="android">
+    <config-file target="res/xml/config.xml" parent="/*">
+      <feature name="DatadogRum">
+        <param name="android-package" value="com.company.datadog.DatadogRum"/>
+        <!-- onload=true: plugin starts BEFORE the first page loads. Required for WebView tracking. -->
+        <param name="onload" value="true"/>
+      </feature>
+      <preference name="DD_APPLICATION_ID" value="$DD_APPLICATION_ID"/>
+      <preference name="DD_CLIENT_TOKEN" value="$DD_CLIENT_TOKEN"/>
+      <preference name="DD_ENV" value="$DD_ENV"/>
+      <preference name="DD_SERVICE" value="$DD_SERVICE"/>
+      <preference name="DD_SITE" value="$DD_SITE"/>
+      <preference name="DD_SESSION_SAMPLE_RATE" value="$DD_SESSION_SAMPLE_RATE"/>
+      <preference name="DD_REPLAY_SAMPLE_RATE" value="$DD_REPLAY_SAMPLE_RATE"/>
+      <preference name="DD_WEBVIEW_HOSTS" value="$DD_WEBVIEW_HOSTS"/>
+    </config-file>
 
-        <config-file target="res/xml/config.xml" parent="/*">
-            <feature name="DatadogRum">
-                <param
-                    name="android-package"
-                    value="com.company.datadog.DatadogRum" />
-            </feature>
-        </config-file>
+    <source-file src="src/android/DatadogRum.java" target-dir="src/com/company/datadog"/>
 
-        src/android/DatadogRum.java
+    <!-- Replace X.Y.Z with the latest version from Maven Central (same version for ALL of them):
+         https://search.maven.org/artifact/com.datadoghq/dd-sdk-android-rum -->
+    <framework src="com.datadoghq:dd-sdk-android-rum:X.Y.Z"/>
+    <framework src="com.datadoghq:dd-sdk-android-session-replay:X.Y.Z"/>
+    <framework src="com.datadoghq:dd-sdk-android-webview:X.Y.Z"/>
+  </platform>
 
-    </platform>
-
-    <platform name="ios">
-
-        src/ios/DatadogRum.swift
-
-    </platform>
-
+  <!-- iOS: not included yet (see README) -->
 </plugin>
-
 
