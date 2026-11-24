@@ -1,6 +1,4 @@
 
-DatadogRum.java
-
 package com.company.datadog;
 
 import android.app.Application;
