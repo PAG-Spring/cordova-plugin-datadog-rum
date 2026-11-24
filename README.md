@@ -1,5 +1,5 @@
 
-# Datadog RUM + Session Replay for OutSystems (Android first)
+# Datadog RUM + Session Replay for OutSystems
 
 ## How it works
 OutSystems mobile screens are web pages inside a Cordova WebView, so two SDKs cooperate:
