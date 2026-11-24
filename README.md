@@ -12,13 +12,7 @@ OutSystems mobile screens are web pages inside a Cordova WebView, so two SDKs co
 
 Native init MUST happen in `pluginInitialize()` (before page load): Android only injects the JS bridge into pages loaded after `WebViewTracking.enable`. That is why the keys now live in plugin variables, not in the OutSystems JS node.
 
-## Step 1 - Replace the files in your GitHub repo
-Replace `plugin.xml`, `src/android/DatadogRum.java`, `www/datadogRum.js` with the versions in this folder (keep `ios/` for now, see "iOS").
-In `plugin.xml` replace every `X.Y.Z` with the latest Datadog Android SDK version (same on all three lines):
-https://search.maven.org/artifact/com.datadoghq/dd-sdk-android-rum
-Commit, then create a tag, e.g. `v0.2.0`.
-
-## Step 2 - Extensibility Configurations (the plugin module, `DatadogRUM_MobilePlugin`, and/or the main app)
+## Step 1 - Extensibility Configurations (the plugin module, `DatadogRUM_MobilePlugin`, and/or the main app)
 ```json
 {
   "plugin": {
@@ -38,12 +32,12 @@ Commit, then create a tag, e.g. `v0.2.0`.
 ```
 Use a different JSON per environment (Dev/Test/Prod) so `DD_ENV` and keys differ. Use the RUM application created as type **Android** in Datadog.
 
-## Step 3 - Add the Browser SDK to OutSystems
+## Step 2 - Add the Browser SDK to OutSystems
 1. Get `datadog-rum.js` from the "CDN sync" tab of https://docs.datadoghq.com/real_user_monitoring/application_monitoring/browser/setup.md (EU site) and download it.
 2. Service Studio, main app module: Interface tab > Scripts > add the file (it becomes a Script).
 3. Add that Script to the Layout block's **Required Scripts** so it is loaded on every screen.
 
-## Step 4 - Initialise (one place only)
+## Step 3 - Initialise (one place only)
 In the plugin module, edit client action `DatadogRUM_InitSDK` -> JavaScript node `InitSdkJS` and replace the code with:
 ```js
 window.plugins.datadogRum.init({
@@ -54,7 +48,7 @@ window.plugins.datadogRum.init({
 (The three input parameters are no longer needed; you may remove them.)
 In the main app call `DatadogRUM_InitSDK` once, from `OnApplicationReady`. Remove any old init so you don't get duplicate sessions.
 
-## Step 5 - Use it
+## Step 4 - Use it
 | Need | Where | JavaScript node |
 |---|---|---|
 | Readable screen names | Each Screen `OnReady` | `window.plugins.datadogRum.setViewName("$parameters.ScreenName");` (add an input, or hardcode the name) |
@@ -66,7 +60,7 @@ In the main app call `DatadogRUM_InitSDK` once, from `OnApplicationReady`. Remov
 
 In JavaScript nodes use OutSystems input parameters (the `$parameters.X` syntax) rather than hardcoding values.
 
-## Step 6 - Build and verify
+## Step 5 - Build and verify
 1. Generate a new mobile package (extensibility changes require it) and install on an Android device.
 2. `adb logcat -s DatadogRum` should print "Datadog native SDK started".
 3. In Chrome open `chrome://inspect`, inspect the app, and run `window.DatadogEventBridge` (should exist) and `location.hostname` (this value must be in `DD_WEBVIEW_HOSTS`).
