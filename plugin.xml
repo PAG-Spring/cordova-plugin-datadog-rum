@@ -42,11 +42,11 @@
 
     <source-file src="src/android/DatadogRum.java" target-dir="src/com/company/datadog"/>
 
-    <!-- Replace X.Y.Z with the latest version from Maven Central (same version for ALL of them):
+    <!-- The latest version is found on Maven Central (same version for ALL 3):
          https://search.maven.org/artifact/com.datadoghq/dd-sdk-android-rum -->
-    <framework src="com.datadoghq:dd-sdk-android-rum:X.Y.Z"/>
-    <framework src="com.datadoghq:dd-sdk-android-session-replay:X.Y.Z"/>
-    <framework src="com.datadoghq:dd-sdk-android-webview:X.Y.Z"/>
+    <framework src="com.datadoghq:dd-sdk-android-rum:3.16.0"/>
+    <framework src="com.datadoghq:dd-sdk-android-session-replay:3.16.0"/>
+    <framework src="com.datadoghq:dd-sdk-android-webview:3.16.0"/>
   </platform>
 
   <!-- iOS: not included yet (see README) -->
