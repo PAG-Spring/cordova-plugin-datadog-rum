@@ -1,0 +1,36 @@
+name: Build Datadog Browser SDK
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        working-directory: browser-sdk
+        run: |
+          npm install --save-exact @datadog/browser-rum@7.19.0
+          npm install --save-dev webpack webpack-cli
+
+      - name: Build SDK
+        working-directory: browser-sdk
+        run: npx webpack --config webpack.config.js
+
+      - name: Upload JavaScript bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: datadog-browser-sdk
+          path: browser-sdk/dist/
