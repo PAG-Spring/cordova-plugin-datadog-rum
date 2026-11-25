@@ -66,11 +66,11 @@ public class DatadogRum extends CordovaPlugin {
 
             Configuration configuration = new Configuration.Builder(clientToken, env, "")
                     .useSite(parseSite(site))
-                    .setService(service)
                     .build();
             Datadog.initialize(app, configuration, TrackingConsent.GRANTED);
 
             Rum.enable(new RumConfiguration.Builder(applicationId)
+                    .setServiceName(service)
                     .setSessionSampleRate(sessionRate)
                     .build());
 
