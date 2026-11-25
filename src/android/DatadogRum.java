@@ -70,7 +70,6 @@ public class DatadogRum extends CordovaPlugin {
             Datadog.initialize(app, configuration, TrackingConsent.GRANTED);
 
             Rum.enable(new RumConfiguration.Builder(applicationId)
-                    .setServiceName(service)
                     .setSessionSampleRate(sessionRate)
                     .build());
 
