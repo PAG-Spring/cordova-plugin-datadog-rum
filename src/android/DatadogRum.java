@@ -82,6 +82,8 @@ public class DatadogRum extends CordovaPlugin {
             publicConfig.put("env", env);
             publicConfig.put("service", service);
             publicConfig.put("site", site);
+            publicConfig.put("sessionSampleRate", sessionRate);
+            publicConfig.put("replaySampleRate", replayRate);
             started = true;
             Log.i(TAG, "Datadog native SDK started");
         } catch (Exception e) {
