@@ -33,27 +33,48 @@ var DatadogRum = {
    * options (all optional): service, version, defaultPrivacyLevel, allowedTracingUrls, ...
    * Anything in options overrides the defaults below. */
   init: function (options) {
-    options = options || {};
-    return native('getConfig').catch(function () { return {}; }).then(function (nc) {
-      if (!rum()) { console.warn('[DatadogRum] Browser SDK (window.DD_RUM) not loaded'); return; }
-      var cfg = {
-        applicationId: nc.applicationId,
-        clientToken: nc.clientToken,
-        site: SITE_MAP[nc.site] || 'datadoghq.eu',
-        env: nc.env,
-        service: nc.service,
-        sessionSampleRate: Number(nc.sessionSampleRate ?? 100),
-        sessionReplaySampleRate: Number(nc.replaySampleRate ?? 100),
-        trackUserInteractions: true,
-        trackResources: true,
-        trackLongTasks: true,
-        defaultPrivacyLevel: 'mask' // safest for a bank; loosen to 'mask-user-input' later
-      };
-      Object.keys(options).forEach(function (k) {
-        if (options[k] !== undefined && options[k] !== null && options[k] !== '') cfg[k] = options[k];
+      options = options || {};
+  
+      return native('getConfig').then(function (nc) {
+  
+          if (!rum() || typeof rum().init !== "function") {
+              return false;
+          }
+  
+          if (!nc || !nc.applicationId || !nc.clientToken) {
+              return false;
+          }
+  
+          var cfg = {
+              applicationId: nc.applicationId,
+              clientToken: nc.clientToken,
+              site: SITE_MAP[nc.site] || 'datadoghq.eu',
+              env: nc.env,
+              service: nc.service,
+              sessionSampleRate: Number(nc.sessionSampleRate != null ? nc.sessionSampleRate : 100),
+              sessionReplaySampleRate: Number(nc.replaySampleRate != null ? nc.replaySampleRate : 20),
+              trackUserInteractions: true,
+              trackResources: true,
+              trackLongTasks: true,
+              defaultPrivacyLevel: 'mask'
+          };
+  
+          Object.keys(options).forEach(function (k) {
+              if (options[k] !== undefined &&
+                  options[k] !== null &&
+                  options[k] !== '') {
+  
+                  cfg[k] = options[k];
+              }
+          });
+  
+          rum().init(cfg);
+  
+          return !!rum().getInternalContext();
+  
+      }).catch(function () {
+          return false;
       });
-      rum().init(cfg);
-    });
   },
 
   /* ---------- user / consent (native + web) ---------- */
